@@ -66,16 +66,14 @@ public class Main {
     }
 
     static boolean isStraight(HashSet<Card> hand) {
-        HashSet<Card.Rank> ranks =
+        ArrayList<Card.Rank> ranks =
                 hand.stream()
-                .map(card -> {
-                    return card.rank;
-                })
-                .collect(Collectors.toCollection(HashSet<Card.Rank>::new));
-        ArrayList<Card.Rank> ranksAl =
-                (ArrayList<Card.Rank>) ranks.stream()
-                .sorted();//.collect(Collectors.toCollection(ArrayList<Card.Rank>::new));
-        return (ranksAl.get(3).ordinal() - ranksAl.get(0).ordinal() == 3);
+                        .map(card -> {
+                            return card.rank;
+                        })
+                        .sorted()
+                        .collect(Collectors.toCollection(ArrayList<Card.Rank>::new));
+        return (ranks.get(3).ordinal() - ranks.get(0).ordinal() == 3);
     }
 
     static boolean isStraightFlush(HashSet<Card> hand) {
@@ -85,16 +83,14 @@ public class Main {
                             return card.suit;
                         })
                         .collect(Collectors.toCollection(HashSet<Card.Suit>::new));
-        HashSet<Card.Rank> ranks =
+        ArrayList<Card.Rank> ranks =
                 hand.stream()
                         .map(card -> {
                             return card.rank;
                         })
-                        .collect(Collectors.toCollection(HashSet<Card.Rank>::new));
-        ArrayList<Card.Rank> ranksAl =
-                (ArrayList<Card.Rank>) ranks.stream()
-                        .sorted();
-        return ranks.size() == 1 && (ranksAl.get(3).ordinal() - ranksAl.get(0).ordinal() == 3);
+                        .sorted()
+                        .collect(Collectors.toCollection(ArrayList<Card.Rank>::new));
+        return (suits.size() == 1) && (ranks.get(3).ordinal() - ranks.get(0).ordinal() == 3);
     }
 
     static boolean isTwoPair(HashSet<Card> hand) {
