@@ -1,5 +1,8 @@
 package com.theironyard;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -28,7 +31,7 @@ public class Main {
                 for (Card c3 : deck3) {
                     HashSet<Card> deck4 = (HashSet<Card>) deck3.clone();
                     deck4.remove(c3);
-                    for (Card c4 : deck) {
+                    for (Card c4 : deck4) {
                       HashSet<Card> hand = new HashSet<>();
                         hand.add(c1);
                         hand.add(c2);
@@ -51,6 +54,75 @@ public class Main {
                 .collect(Collectors.toCollection(HashSet<Card.Suit>::new));
         return suits.size() == 1;
     }
+
+    static boolean isFour(HashSet<Card> hand) {
+        HashSet<Card.Rank> ranks =
+                hand.stream()
+                .map(card -> {
+                    return card.rank;
+                })
+                .collect(Collectors.toCollection(HashSet<Card.Rank>::new));
+        return ranks.size() == 1;
+    }
+
+    static boolean isStraight(HashSet<Card> hand) {
+        HashSet<Card.Rank> ranks =
+                hand.stream()
+                .map(card -> {
+                    return card.rank;
+                })
+                .collect(Collectors.toCollection(HashSet<Card.Rank>::new));
+        ArrayList<Card.Rank> ranksAl =
+                (ArrayList<Card.Rank>) ranks.stream()
+                .sorted();//.collect(Collectors.toCollection(ArrayList<Card.Rank>::new));
+        return (ranksAl.get(3).ordinal() - ranksAl.get(0).ordinal() == 3);
+    }
+
+    static boolean isStraightFlush(HashSet<Card> hand) {
+        HashSet<Card.Suit> suits =
+                hand.stream()
+                        .map(card -> { //anon fxn
+                            return card.suit;
+                        })
+                        .collect(Collectors.toCollection(HashSet<Card.Suit>::new));
+        HashSet<Card.Rank> ranks =
+                hand.stream()
+                        .map(card -> {
+                            return card.rank;
+                        })
+                        .collect(Collectors.toCollection(HashSet<Card.Rank>::new));
+        ArrayList<Card.Rank> ranksAl =
+                (ArrayList<Card.Rank>) ranks.stream()
+                        .sorted();
+        return ranks.size() == 1 && (ranksAl.get(3).ordinal() - ranksAl.get(0).ordinal() == 3);
+    }
+
+    static boolean isTwoPair(HashSet<Card> hand) {
+        ArrayList<Card.Rank> ranks =
+                hand.stream()
+                .map(card -> {
+                    return card.rank;
+                })
+                .sorted()
+                .collect(Collectors.toCollection(ArrayList<Card.Rank>::new));
+        return (ranks.get(0).ordinal() == ranks.get(1).ordinal()) && (ranks.get(2).ordinal() == ranks.get(3).ordinal());
+    }
+
+    static boolean isThree(HashSet<Card> hand) {
+        ArrayList<Integer> ranks =
+                hand.stream()
+                        .map(card -> {
+                            return card.rank.ordinal();
+                        })
+                        .sorted()
+                        .collect(Collectors.toCollection(ArrayList<Integer>::new));
+        return ((ranks.get(0) == ranks.get(1) && ranks.get(1) == ranks.get(2))) || ((ranks.get(1) == ranks.get(2) &&  (ranks.get(2) == ranks.get(3))));
+
+
+
+
+    }
+
 
 
     public static void main(String[] args) {
